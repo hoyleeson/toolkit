@@ -20,5 +20,5 @@ int main(int argc, char **argv)
         return 0;
 
     addr = str_to_ipaddr(argv[1]);
-    printf("0x%x\n", addr);
+    printf("%u\n", addr);
 }
