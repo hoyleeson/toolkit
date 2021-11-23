@@ -4,6 +4,7 @@ all:
 	gcc -o strftime strftime.c
 	gcc -o netspeed netspeed.c
 	gcc -o gdot gdot.c
+	gcc -o ipaddr ipaddr.c
 
 clean:
-	rm -fr perm nseg2ip strftime netspeed gdot
+	rm -fr perm nseg2ip strftime netspeed gdot ipaddr
