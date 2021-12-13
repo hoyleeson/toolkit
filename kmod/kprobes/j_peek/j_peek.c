@@ -36,6 +36,20 @@ static int j_ip_rcv(struct sk_buff *skb, struct net_device *dev,
 	return 0;
 }
 
+static int j___skb_checksum_complete(struct sk_buff *skb)
+{
+    __wsum csum;
+    __sum16 sum;
+
+    csum = skb_checksum(skb, 0, skb->len, 0);
+    sum = csum_fold(csum_add(skb->csum, csum));
+    printk("skb len:%d, csum:%d, sum:%d\n", skb->len, csum, sum);
+
+	/* Always end with a call to jprobe_return(). */
+	jprobe_return();
+	return 0;
+}
+
 #if 0
 static int j_dev_change_xdp_fd(struct net_device *dev, int fd)
 {
@@ -58,6 +72,12 @@ static struct jprobe my_jprobe[] = {
         .entry			= j_ip_rcv,
         .kp = {
             .symbol_name	= "ip_rcv",
+        },
+    },
+    {
+        .entry			= j___skb_checksum_complete,
+        .kp = {
+            .symbol_name	= "__skb_checksum_complete",
         },
     },
 #if 0
