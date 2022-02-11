@@ -164,6 +164,7 @@ static unsigned int toa_nf_packet_setlabel(int af, struct sk_buff *skb)
     skb_reset_transport_header(skb);
 
     iph = (struct iphdr *)iph_buf;
+    /* tcp checksum */
     toa_v4_recalc_csum(skb, iph->saddr, iph->daddr);
 
     skb_push(skb, iphl);
@@ -172,6 +173,7 @@ static unsigned int toa_nf_packet_setlabel(int af, struct sk_buff *skb)
     iph = ip_hdr(skb);
     iph->tot_len = htons(ntohs(iph->tot_len) + llen);
 
+    /* ip checksum */
     ip_send_check(iph);
     return NF_ACCEPT;
 }
