@@ -1,6 +1,6 @@
-# Makefile of toa_i module
-# Author Sinoy.Lee
-# Date 2018-1-1
+# Makefile of tomark module
+# Author Sinoy Lee <sinoylee@gmail.com>
+# Date 2022-02-11
 
 obj-m += tomark.o
 tomark_kmod-objs := tomark.o

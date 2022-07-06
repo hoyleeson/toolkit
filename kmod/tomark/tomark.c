@@ -15,10 +15,9 @@
 #include <linux/proc_fs.h>
 #include <net/tcp.h>
 
-/* 
- * set skb mark:
+/* Set skb mark:
  *  iptables -t mangle -A OUTPUT -j MARK --set-mark 0xa2345678
- * */
+ */
 
 #define NF_IP_PRI_TOMARK      (NF_IP_PRI_MANGLE + 5)
 
@@ -47,7 +46,13 @@ static int tomark_packet_set_mark(int af, struct sk_buff *skb, u64 mark)
     int len, tcp_hdrlen;
     struct tcphdr *tcph;
     unsigned int tcphoff;
-    struct iphdr *iph = ip_hdr(skb);
+    struct iphdr *iph;
+
+    /* Unsupported protocol ipv6 now. */
+    if (af != AF_INET)
+        return 0;
+
+    iph = ip_hdr(skb);
 
     if (!skb_make_writable(skb, skb->len))
         return -1;
@@ -128,11 +133,15 @@ static int tomark_packet_set_mark(int af, struct sk_buff *skb, u64 mark)
  * @return NULL if we don't get client ip/port;
  *         value of tomark_data in ret_ptr if we get client ip/port.
  */
-static u64 tomark_packet_get_mark(struct sk_buff *skb)
+static u64 tomark_packet_get_mark(int af, struct sk_buff *skb)
 {
     struct tcphdr *th;
     int length;
     unsigned char *ptr;
+
+    /* Unsupported protocol ipv6 now. */
+    if (af != AF_INET)
+        return 0;
 
     if (!skb)
         return 0;
@@ -242,7 +251,7 @@ static unsigned int tomark_nf_packet_in(int af, struct sk_buff *skb)
         return NF_ACCEPT;
     }
 
-    mark = tomark_packet_get_mark(skb);
+    mark = tomark_packet_get_mark(af, skb);
     if (mark) {
         u32 label, id;
         label = mark & 0xffffffff;
@@ -340,7 +349,7 @@ static void __exit tomark_kmod_exit(void)
 module_init(tomark_kmod_init);
 module_exit(tomark_kmod_exit);
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Sinoy Lee<sinoylee@gmail.com>");
+MODULE_AUTHOR("Sinoy Lee <sinoylee@gmail.com>");
 MODULE_VERSION("1.0.0");
 MODULE_DESCRIPTION("tomark_kmod module");
 

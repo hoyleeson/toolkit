@@ -50,6 +50,14 @@ static int j___skb_checksum_complete(struct sk_buff *skb)
 	return 0;
 }
 
+static int j_ip_finish_output2(struct net *net, struct sock *sk, struct sk_buff *skb)
+{
+    printk("ip_finish_output2 probe entry\n");
+	/* Always end with a call to jprobe_return(). */
+	jprobe_return();
+	return 0;
+}
+
 #if 0
 static int j_dev_change_xdp_fd(struct net_device *dev, int fd)
 {
@@ -78,6 +86,12 @@ static struct jprobe my_jprobe[] = {
         .entry			= j___skb_checksum_complete,
         .kp = {
             .symbol_name	= "__skb_checksum_complete",
+        },
+    },
+    {
+        .entry			= j_ip_finish_output2,
+        .kp = {
+            .symbol_name	= "ip_finish_output2",
         },
     },
 #if 0
