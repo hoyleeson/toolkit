@@ -3,8 +3,8 @@
 # Date 2018-1-1
 
 
-obj-m += toa.o
-toa_label_kmod-objs := toa.o
+obj-m += toa_label.o
+toa_label_kmod-objs := toa_label.o
 
 CURRENT_PATH := $(shell pwd)
 
