@@ -33,12 +33,13 @@ void print_ipv4_kval(const char *symbol)
         printk("Not found symbol %s\n", symbol);
         return;
     }
-    printk("kval %s:%pI4\n", symbol, fi);
+    printk("kval %s:addr:%p, val:%pI4\n", symbol, fi, fi);
 }
 
 static int __init print_kval_init(void)
 {
-    print_kval("force_irqthreads");
+    print_bool_kval("force_irqthreads");
+    print_ipv4_kval("g_local_ip");
     printk("print kmod init successed.\n");
     return 0;
 }
