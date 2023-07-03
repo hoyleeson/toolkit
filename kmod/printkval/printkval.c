@@ -6,7 +6,7 @@
 #include <linux/interrupt.h>
 #include <linux/kallsyms.h>
 
-void print_kval(const char *symbol)
+void print_bool_kval(const char *symbol)
 {
     bool *fi = (bool *)kallsyms_lookup_name(symbol);
     if (!fi) {
@@ -14,6 +14,26 @@ void print_kval(const char *symbol)
         return;
     }
     printk("kval %s:%d\n", symbol, *fi);
+}
+
+void print_u32_kval(const char *symbol)
+{
+    u32 *fi = (u32 *)kallsyms_lookup_name(symbol);
+    if (!fi) {
+        printk("Not found symbol %s\n", symbol);
+        return;
+    }
+    printk("kval %s:%d\n", symbol, *fi);
+}
+
+void print_ipv4_kval(const char *symbol)
+{
+    u32 *fi = (u32 *)kallsyms_lookup_name(symbol);
+    if (!fi) {
+        printk("Not found symbol %s\n", symbol);
+        return;
+    }
+    printk("kval %s:%pI4\n", symbol, fi);
 }
 
 static int __init print_kval_init(void)
