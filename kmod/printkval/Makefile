@@ -14,7 +14,7 @@ LINUX_KERNEL := $(KDIR)
 endif
 
 all:
-	make -C $(LINUX_KERNEL) SUBDIRS=$(PWD) modules
+	make -C $(LINUX_KERNEL) M=$(PWD) modules
 
 clean:
 	make -C $(LINUX_KERNEL) M=$(CURRENT_PATH) clean

@@ -1,4 +1,9 @@
-obj-m += k_peek.o
+# Makefile of simple module
+# Author hoyleeson
+# Date 2018-1-1
+
+
+obj-m += rwsem_probe.o
 
 CURRENT_PATH := $(shell pwd)
 
@@ -14,4 +19,7 @@ all:
 clean:
 	make -C $(LINUX_KERNEL) M=$(CURRENT_PATH) clean
 	rm -fr out Module.markers
+
+install:
+	make -C $(LINUX_KERNEL) M=$(CURRENT_PATH) modules_install INSTALL_MOD_PATH=$(PWD)/out
 
